@@ -5,6 +5,11 @@
     "destinations": "data/destinations.json",
     "offers": "data/offers.csv"
   },
+  "validation": {
+    "rating_min": 1.0,
+    "rating_max": 5.0,
+    "review_file": "logs/rejected_records.csv"
+  },
   "logging": {
     "file": "logs/busbidder.log",
     "level": "INFO"
