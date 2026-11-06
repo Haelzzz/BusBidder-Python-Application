@@ -1,0 +1,6 @@
+[
+  {"company_id": "SOL", "name": "SolRuta", "profile": "Low-cost daytime services"},
+  {"company_id": "NOC", "name": "NocheVia", "profile": "Overnight and late-evening services"},
+  {"company_id": "bad", "name": "Lower-case code", "profile": "Invalid: malformed company_id"},
+  {"company_id": "SOL", "name": "SolRuta again", "profile": "Invalid: duplicate company_id"}
+]

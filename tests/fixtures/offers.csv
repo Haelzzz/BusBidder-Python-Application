@@ -1,0 +1,9 @@
+offer_id,company_id,destination_id,departure_date,departure_time,arrival_date,arrival_time,price_eur,transfers,fare_type,changeable,refundable,luggage_kg,available_seats,rating,co2_kg
+OF-SOL-MAL-0001,SOL,MAL,2026-07-12,08:30,2026-07-12,14:45,32.50,0,standard,true,false,20,12,4.1,15.9
+OF-SOL-TOL-0001,SOL,TOL,2026-07-12,00:00,2026-07-12,01:05,9.00,0,basic,false,false,0,1,1.0,
+OF-NOC-MAL-0001,NOC,MAL,2026-07-12,23:59,2026-07-13,07:10,30.00,1,flex,True,YES,30,45,5.0,18.7
+OF-SOL-MAL-0002,SOL,MAL,2026-07-13,08:30,2026-07-13,14:45,-1.00,0,standard,true,false,20,12,4.1,15.9
+OF-SOL-ZAR-0001,SOL,ZAR,2026-07-13,08:30,2026-07-13,12:30,20.00,0,standard,true,false,20,12,4.1,9.6
+OF-SOL-MAL-0003,SOL,MAL,2026-07-13,24:00,2026-07-14,06:00,32.50,0,standard,true,false,20,12,4.1,15.9
+OF-SOL-MAL-0001,SOL,MAL,2026-07-14,08:30,2026-07-14,14:45,32.50,0,standard,true,false,20,12,4.1,15.9
+OF-SOL-MAL-0004,SOL,MAL,2026-07-14,08:30,2026-07-14,14:45,,0,standard,true,false,20,12,4.1,15.9

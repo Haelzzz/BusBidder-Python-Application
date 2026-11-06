@@ -1,0 +1,5 @@
+[
+  {"destination_id": "MAL", "name": "Malaga", "region": "Andalusia", "coastal": true, "distance_km": 530, "base_duration_min": 360},
+  {"destination_id": "TOL", "name": "Toledo", "region": "Castilla-La Mancha", "coastal": false, "distance_km": 75, "base_duration_min": 60},
+  {"destination_id": "ZAR", "name": "Zaragoza", "region": "Aragon", "coastal": false, "distance_km": -320, "base_duration_min": 225}
+]

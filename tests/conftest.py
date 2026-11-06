@@ -1,10 +1,30 @@
 """Shared test fixtures."""
 
 from datetime import datetime
+from pathlib import Path
 
 import pytest
 
 from busbidder.models import Company, Destination, FareConditions, FareType, Offer
+from busbidder.settings import Settings
+
+FIXTURES = Path(__file__).parent / "fixtures"
+
+
+@pytest.fixture
+def fixture_settings(tmp_path: Path) -> Settings:
+    """Settings pointing at the small fixture files; outputs go to a temporary folder."""
+    return Settings(
+        origin="Madrid",
+        companies_file=FIXTURES / "companies.json",
+        destinations_file=FIXTURES / "destinations.json",
+        offers_file=FIXTURES / "offers.csv",
+        review_file=tmp_path / "rejected_records.csv",
+        log_file=tmp_path / "busbidder.log",
+        log_level="INFO",
+        rating_min=1.0,
+        rating_max=5.0,
+    )
 
 
 @pytest.fixture
