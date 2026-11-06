@@ -30,6 +30,10 @@ It is optional: the commands below also work without it (see *Running*).
 python -m busbidder
 ```
 
+On start the program loads and validates `data/` and prints a summary.
+Rejected records are written to `logs/rejected_records.csv`; the full log is
+`logs/busbidder.log`.
+
 Without the editable install, either set `PYTHONPATH=src` first or run the
 entry file directly: `python src/busbidder/__main__.py`. In VS Code, use the
 **BusBidder** launch configuration (Run and Debug panel) or "Run Python File"

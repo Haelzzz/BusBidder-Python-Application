@@ -16,4 +16,5 @@ venv/
 
 # Runtime output (keep the folders, not the generated files)
 logs/*.log
+logs/*.csv
 docs/*
