@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "busbidder"
+version = "0.1.0"
+description = "BusBidder Spain: filter and rank fictional bus offers with a weighted scoring model (ACIT4420 final project)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []  # standard library only at runtime
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+busbidder = "busbidder.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]  # tests run without installing the package
+addopts = "-ra"
