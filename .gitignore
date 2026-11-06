@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Tooling
+.pytest_cache/
+.mypy_cache/
+.coverage
+
+# Runtime output (keep the folders, not the generated files)
+logs/*.log
+docs/*
