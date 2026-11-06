@@ -1,0 +1,27 @@
+[
+  {
+    "company_id": "SOL",
+    "name": "SolRuta",
+    "profile": "Low-cost daytime services"
+  },
+  {
+    "company_id": "CAM",
+    "name": "Camino Express",
+    "profile": "Fast direct connections between major cities"
+  },
+  {
+    "company_id": "COS",
+    "name": "CostaLink",
+    "profile": "Strong coverage of coastal destinations"
+  },
+  {
+    "company_id": "VER",
+    "name": "VerdeBus",
+    "profile": "Environment-focused services and modern vehicles"
+  },
+  {
+    "company_id": "NOC",
+    "name": "NocheVia",
+    "profile": "Overnight and late-evening services"
+  }
+]

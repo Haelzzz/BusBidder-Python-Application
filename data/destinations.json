@@ -1,0 +1,122 @@
+[
+  {
+    "destination_id": "BCN",
+    "name": "Barcelona",
+    "region": "Catalonia",
+    "coastal": true,
+    "distance_km": 620,
+    "base_duration_min": 465
+  },
+  {
+    "destination_id": "VLC",
+    "name": "Valencia",
+    "region": "Valencian Community",
+    "coastal": true,
+    "distance_km": 360,
+    "base_duration_min": 255
+  },
+  {
+    "destination_id": "SEV",
+    "name": "Seville",
+    "region": "Andalusia",
+    "coastal": false,
+    "distance_km": 530,
+    "base_duration_min": 375
+  },
+  {
+    "destination_id": "MAL",
+    "name": "Malaga",
+    "region": "Andalusia",
+    "coastal": true,
+    "distance_km": 530,
+    "base_duration_min": 360
+  },
+  {
+    "destination_id": "GRA",
+    "name": "Granada",
+    "region": "Andalusia",
+    "coastal": false,
+    "distance_km": 420,
+    "base_duration_min": 285
+  },
+  {
+    "destination_id": "COR",
+    "name": "Cordoba",
+    "region": "Andalusia",
+    "coastal": false,
+    "distance_km": 400,
+    "base_duration_min": 270
+  },
+  {
+    "destination_id": "BIL",
+    "name": "Bilbao",
+    "region": "Basque Country",
+    "coastal": true,
+    "distance_km": 400,
+    "base_duration_min": 285
+  },
+  {
+    "destination_id": "SSB",
+    "name": "San Sebastian",
+    "region": "Basque Country",
+    "coastal": true,
+    "distance_km": 450,
+    "base_duration_min": 330
+  },
+  {
+    "destination_id": "ZAR",
+    "name": "Zaragoza",
+    "region": "Aragon",
+    "coastal": false,
+    "distance_km": 320,
+    "base_duration_min": 225
+  },
+  {
+    "destination_id": "ALC",
+    "name": "Alicante",
+    "region": "Valencian Community",
+    "coastal": true,
+    "distance_km": 420,
+    "base_duration_min": 300
+  },
+  {
+    "destination_id": "MUR",
+    "name": "Murcia",
+    "region": "Region of Murcia",
+    "coastal": false,
+    "distance_km": 400,
+    "base_duration_min": 290
+  },
+  {
+    "destination_id": "SAL",
+    "name": "Salamanca",
+    "region": "Castile and Leon",
+    "coastal": false,
+    "distance_km": 215,
+    "base_duration_min": 150
+  },
+  {
+    "destination_id": "TOL",
+    "name": "Toledo",
+    "region": "Castilla-La Mancha",
+    "coastal": false,
+    "distance_km": 75,
+    "base_duration_min": 60
+  },
+  {
+    "destination_id": "SCQ",
+    "name": "Santiago de Compostela",
+    "region": "Galicia",
+    "coastal": false,
+    "distance_km": 600,
+    "base_duration_min": 495
+  },
+  {
+    "destination_id": "CAD",
+    "name": "Cadiz",
+    "region": "Andalusia",
+    "coastal": true,
+    "distance_km": 660,
+    "base_duration_min": 450
+  }
+]

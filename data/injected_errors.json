@@ -1,0 +1,95 @@
+{
+  "seed": 4420,
+  "date_range": [
+    "2026-07-08",
+    "2026-07-19"
+  ],
+  "valid_offers": 1204,
+  "invalid_offers": 12,
+  "injected": [
+    {
+      "offer_id": "OF-CAM-CAD-9001",
+      "problem": "negative_price",
+      "field": "price_eur",
+      "value": "-12.50",
+      "description": "Price is negative"
+    },
+    {
+      "offer_id": "OF-SOL-XYZ-9002",
+      "problem": "unknown_destination",
+      "field": "destination_id",
+      "value": "XYZ",
+      "description": "Destination code not in destinations.json"
+    },
+    {
+      "offer_id": "OF-CAM-BIL-9003",
+      "problem": "invalid_date",
+      "field": "departure_date",
+      "value": "2026-06-31",
+      "description": "Impossible calendar date (June has 30 days); a date-shaped regex would accept it"
+    },
+    {
+      "offer_id": "OF-VER-SCQ-9004",
+      "problem": "invalid_date",
+      "field": "departure_date",
+      "value": "14/07/2026",
+      "description": "Date not in ISO format YYYY-MM-DD"
+    },
+    {
+      "offer_id": "OF-VER-MUR-9005",
+      "problem": "invalid_time",
+      "field": "departure_time",
+      "value": "25:10",
+      "description": "Hour outside 00-23"
+    },
+    {
+      "offer_id": "OF-SOL-MAL-9006",
+      "problem": "arrival_before_departure",
+      "field": "arrival_time",
+      "value": "11:30",
+      "description": "Arrives two and a half hours before it departs, on the same day"
+    },
+    {
+      "offer_id": "OF-NOC-SEV-9007",
+      "problem": "rating_out_of_scale",
+      "field": "rating",
+      "value": "6.5",
+      "description": "Rating above the 1-5 scale"
+    },
+    {
+      "offer_id": "OF-CAM-SCQ-9008",
+      "problem": "zero_seats",
+      "field": "available_seats",
+      "value": "0",
+      "description": "No seats available"
+    },
+    {
+      "offer_id": "OF-NOC-GRA-9009",
+      "problem": "missing_field",
+      "field": "price_eur",
+      "value": "",
+      "description": "Price is empty"
+    },
+    {
+      "offer_id": "OF-SOL-BIL-9010",
+      "problem": "missing_field",
+      "field": "departure_time",
+      "value": "",
+      "description": "Departure time is empty"
+    },
+    {
+      "offer_id": "OF-SOL-SSB-12A",
+      "problem": "malformed_id",
+      "field": "offer_id",
+      "value": "OF-SOL-SSB-12A",
+      "description": "Sequence part is not four digits"
+    },
+    {
+      "offer_id": "of_sol_zar_9012",
+      "problem": "malformed_id",
+      "field": "offer_id",
+      "value": "of_sol_zar_9012",
+      "description": "Lower case with underscores instead of hyphens"
+    }
+  ]
+}
