@@ -1,0 +1,12 @@
+{
+  "origin": "Madrid",
+  "data": {
+    "companies": "data/companies.json",
+    "destinations": "data/destinations.json",
+    "offers": "data/offers.csv"
+  },
+  "logging": {
+    "file": "logs/busbidder.log",
+    "level": "INFO"
+  }
+}
