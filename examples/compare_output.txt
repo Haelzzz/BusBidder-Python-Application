@@ -1,0 +1,215 @@
+﻿Data loaded:
+  companies.json           5 loaded     0 rejected
+  destinations.json       15 loaded     0 rejected
+  offers.csv            1204 loaded    12 rejected
+Rejected by category:
+  inconsistent             1
+  invalid_datetime         3
+  malformed_id             2
+  missing_field            2
+  no_availability          1
+  out_of_range             2
+  unknown_reference        1
+Rejected records written to logs\rejected_records.csv (details in logs\busbidder.log)
+
+====================================================================================================
+Balanced traveller (specification example): The example traveller and weights from the project specification.
+
+Hard constraints (an offer must meet all of them):
+  destination    goes to MAL
+  travel_window  departs between 2026-07-12 and 2026-07-14
+  seats          at least 1 seat(s) available
+  budget         total price at most EUR 50.00
+  max_transfers  at most 1 transfer(s)
+  changeable     ticket must be changeable
+Checked 102 offers: 15 acceptable, 87 removed.
+Removed by (an offer can break several constraints):
+  travel_window     75
+  budget            26
+  max_transfers      1
+  changeable        29
+
+Top 5 of 15 (raw value and score 0-100 per criterion):
+Weights: price 40%, duration 25%, departure 15%, flexibility 20%
+  #  Offer            Company         Departs                  Price        Duration       Departure     Flexibility   Total
+  1  OF-SOL-MAL-0011  SolRuta         13 Jul 12:15        31.00 (98)       6h45 (74)   3h15 off (46)     change (60)    76.7
+  2  OF-COS-MAL-0018  CostaLink       14 Jul 14:15        39.00 (78)       5h50 (86)   5h15 off (12)    refund (100)    74.6
+  3  OF-SOL-MAL-0014  SolRuta         14 Jul 14:15       30.50 (100)       6h30 (77)   5h15 off (12)     change (60)    73.1
+  3  OF-SOL-MAL-0013  SolRuta         14 Jul 12:15        34.00 (90)       6h50 (73)   3h15 off (46)     change (60)    73.1
+  5  OF-SOL-MAL-0009  SolRuta         12 Jul 12:15        37.00 (82)       6h25 (78)   3h15 off (46)     change (60)    71.3
+  ... and 10 more
+
+Recommended: OF-SOL-MAL-0011, SolRuta, 13 Jul 12:15 -> 13 Jul 19:00, EUR 31.00 (score 76.7)
+Advantages:
+  + price: EUR 31.00, EUR 0.50 more than the cheapest option
+Remaining disadvantages:
+  - duration: takes 6h45, 1h45 longer than the fastest option
+  - flexibility: changeable ticket, but not refundable
+  - departure: departs 3h15 from your preferred time (closest option: 2h00)
+Compared with #2 (OF-COS-MAL-0018, CostaLink, 74.6): 2.1 points ahead; gains on price (+8.1), departure (+5.0); loses on flexibility (-8.0), duration (-2.9).
+Not part of the score: direct, no transfers; 20 kg luggage included; 22 seat(s) left; customer rating 3.7.
+This is the best match under the hard constraints and weights used (price 40%, duration 25%, departure 15%, flexibility 20%). It is not objectively the best offer: different weights can give a different recommendation.
+
+====================================================================================================
+Budget traveller: Wants the cheapest ticket; accepts transfers, basic fares and less convenient times.
+
+Hard constraints (an offer must meet all of them):
+  destination    goes to MAL
+  travel_window  departs between 2026-07-12 and 2026-07-14
+  seats          at least 1 seat(s) available
+  budget         total price at most EUR 50.00
+Checked 102 offers: 22 acceptable, 80 removed.
+Removed by (an offer can break several constraints):
+  travel_window     75
+  budget            26
+
+Top 5 of 22 (raw value and score 0-100 per criterion):
+Weights: price 65%, duration 15%, departure 10%, flexibility 10%
+  #  Offer            Company         Departs                  Price        Duration       Departure     Flexibility   Total
+  1  OF-SOL-MAL-0011  SolRuta         13 Jul 12:15        31.00 (94)       6h45 (74)   2h15 off (62)     change (60)    84.2
+  2  OF-SOL-MAL-0014  SolRuta         14 Jul 14:15        30.50 (95)       6h30 (77)   4h15 off (29)     change (60)    82.3
+  3  OF-SOL-MAL-0012  SolRuta         13 Jul 14:15       29.00 (100)       6h50 (73)   4h15 off (29)        none (0)    78.9
+  4  OF-SOL-MAL-0013  SolRuta         14 Jul 12:15        34.00 (85)       6h50 (73)   2h15 off (62)     change (60)    78.7
+  5  OF-SOL-MAL-0010  SolRuta         12 Jul 14:15        31.50 (92)       7h35 (66)   4h15 off (29)     change (60)    78.6
+  ... and 17 more
+
+Recommended: OF-SOL-MAL-0011, SolRuta, 13 Jul 12:15 -> 13 Jul 19:00, EUR 31.00 (score 84.2)
+Advantages:
+  + price: EUR 31.00, EUR 2.00 more than the cheapest option
+Remaining disadvantages:
+  - duration: takes 6h45, 1h45 longer than the fastest option
+  - departure: departs 2h15 from your preferred time (closest option: 1h00)
+  - flexibility: changeable ticket, but not refundable
+Compared with #2 (OF-SOL-MAL-0014, SolRuta, 82.3): 1.9 points ahead; gains on departure (+3.3); loses on price (-1.0), duration (-0.4). The lead is under 2 points, so a small change in weights could change the order.
+Not part of the score: direct, no transfers; 20 kg luggage included; 22 seat(s) left; customer rating 3.7.
+This is the best match under the hard constraints and weights used (price 65%, duration 15%, departure 10%, flexibility 10%). It is not objectively the best offer: different weights can give a different recommendation.
+
+====================================================================================================
+Business traveller: Needs a direct, changeable trip leaving early; time matters more than money.
+
+Hard constraints (an offer must meet all of them):
+  destination    goes to MAL
+  travel_window  departs between 2026-07-12 and 2026-07-14
+  seats          at least 1 seat(s) available
+  budget         total price at most EUR 50.00
+  max_transfers  at most 0 transfer(s)
+  changeable     ticket must be changeable
+Checked 102 offers: 13 acceptable, 89 removed.
+Removed by (an offer can break several constraints):
+  travel_window     75
+  budget            26
+  max_transfers     17
+  changeable        29
+
+Top 5 of 13 (raw value and score 0-100 per criterion):
+Weights: price 10%, duration 40%, departure 30%, flexibility 20%
+  #  Offer            Company         Departs                  Price        Duration       Departure     Flexibility   Total
+  1  OF-VER-MAL-0006  VerdeBus        13 Jul 11:00        48.00 (64)       6h00 (83)   3h30 off (42)     change (60)    64.2
+  2  OF-COS-MAL-0018  CostaLink       14 Jul 14:15        39.00 (78)       5h50 (86)    6h45 off (0)    refund (100)    62.1
+  3  OF-CAM-MAL-0012  Camino Express  13 Jul 15:00        49.50 (62)      5h00 (100)    7h30 off (0)     change (60)    58.2
+  4  OF-SOL-MAL-0011  SolRuta         13 Jul 12:15        31.00 (98)       6h45 (74)   4h45 off (21)     change (60)    57.7
+  4  OF-SOL-MAL-0009  SolRuta         12 Jul 12:15        37.00 (82)       6h25 (78)   4h45 off (21)     change (60)    57.7
+  ... and 8 more
+
+Recommended: OF-VER-MAL-0006, VerdeBus, 13 Jul 11:00 -> 13 Jul 17:00, EUR 48.00 (score 64.2)
+Advantages:
+  (no single standout: a compromise across the criteria)
+Remaining disadvantages:
+  - duration: takes 6h00, 1h00 longer than the fastest option
+  - departure: departs 3h30 from your preferred time
+  - flexibility: changeable ticket, but not refundable
+  - price: EUR 48.00, EUR 17.50 more than the cheapest option
+Compared with #2 (OF-COS-MAL-0018, CostaLink, 62.1): 2.1 points ahead; gains on departure (+12.5); loses on flexibility (-8.0), price (-1.5), duration (-1.0).
+Not part of the score: direct, no transfers; 20 kg luggage included; 32 seat(s) left; customer rating 4.6.
+This is the best match under the hard constraints and weights used (price 10%, duration 40%, departure 30%, flexibility 20%). It is not objectively the best offer: different weights can give a different recommendation.
+
+====================================================================================================
+Environment-focused traveller: Wants the lowest emissions; accepts at most one transfer.
+
+Hard constraints (an offer must meet all of them):
+  destination    goes to MAL
+  travel_window  departs between 2026-07-12 and 2026-07-14
+  seats          at least 1 seat(s) available
+  budget         total price at most EUR 50.00
+  max_transfers  at most 1 transfer(s)
+Checked 102 offers: 22 acceptable, 80 removed.
+Removed by (an offer can break several constraints):
+  travel_window     75
+  budget            26
+  max_transfers      1
+
+Top 5 of 22 (raw value and score 0-100 per criterion):
+Weights: price 25%, duration 10%, departure 10%, flexibility 10%, emissions 45%
+  #  Offer            Company         Departs                  Price        Duration       Departure     Flexibility             CO2   Total
+  1  OF-VER-MAL-0006  VerdeBus        13 Jul 11:00        48.00 (60)       6h00 (83)   2h00 off (67)     change (60)       6.4 (100)    81.1
+  2  OF-VER-MAL-0007  VerdeBus        14 Jul 11:00        44.50 (65)       5h45 (87)   2h00 off (67)        none (0)       6.4 (100)    76.7
+  3  OF-SOL-MAL-0011  SolRuta         13 Jul 12:15        31.00 (94)       6h45 (74)   3h15 off (46)     change (60)       n/a* (40)    59.5
+  4  OF-SOL-MAL-0013  SolRuta         14 Jul 12:15        34.00 (85)       6h50 (73)   3h15 off (46)     change (60)       15.9 (40)    57.3
+  5  OF-SOL-MAL-0014  SolRuta         14 Jul 14:15        30.50 (95)       6h30 (77)   5h15 off (12)     change (60)       15.9 (40)    56.8
+  ... and 17 more
+* value missing or not applicable: given the median score of the other offers
+
+Recommended: OF-VER-MAL-0006, VerdeBus, 13 Jul 11:00 -> 13 Jul 17:00, EUR 48.00 (score 81.1)
+Advantages:
+  + emissions: lowest CO2 of the options (6.4 kg)
+  + departure: departs 2h00 from your preferred time
+Remaining disadvantages:
+  - price: EUR 48.00, EUR 19.00 more than the cheapest option
+  - duration: takes 6h00, 1h00 longer than the fastest option
+  - flexibility: changeable ticket, but not refundable
+Compared with #2 (OF-VER-MAL-0007, VerdeBus, 76.7): 4.4 points ahead; gains on flexibility (+6.0); loses on price (-1.2), duration (-0.4).
+Not part of the score: direct, no transfers; 20 kg luggage included; 32 seat(s) left; customer rating 4.6.
+This is the best match under the hard constraints and weights used (price 25%, duration 10%, departure 10%, flexibility 10%, emissions 45%). It is not objectively the best offer: different weights can give a different recommendation.
+
+====================================================================================================
+Flexibility-focused tourist: Travels with a suitcase and wants to be able to change or cancel; prefers a late-morning start.
+
+Hard constraints (an offer must meet all of them):
+  destination    goes to MAL
+  travel_window  departs between 2026-07-12 and 2026-07-14
+  seats          at least 1 seat(s) available
+  budget         total price at most EUR 50.00
+  luggage        at least 20 kg luggage included
+Checked 102 offers: 15 acceptable, 87 removed.
+Removed by (an offer can break several constraints):
+  travel_window     75
+  budget            26
+  luggage           29
+
+Top 5 of 15 (raw value and score 0-100 per criterion):
+Weights: price 25%, duration 10%, departure 20%, flexibility 45%
+  #  Offer            Company         Departs                  Price        Duration       Departure     Flexibility   Total
+  1  OF-COS-MAL-0018  CostaLink       14 Jul 14:15        39.00 (78)       5h50 (86)   3h15 off (46)    refund (100)    82.3
+  2  OF-SOL-MAL-0011  SolRuta         13 Jul 12:15        31.00 (98)       6h45 (74)   1h15 off (79)     change (60)    74.8
+  3  OF-SOL-MAL-0013  SolRuta         14 Jul 12:15        34.00 (90)       6h50 (73)   1h15 off (79)     change (60)    72.6
+  4  OF-SOL-MAL-0009  SolRuta         12 Jul 12:15        37.00 (82)       6h25 (78)   1h15 off (79)     change (60)    71.2
+  4  OF-VER-MAL-0006  VerdeBus        13 Jul 11:00        48.00 (64)       6h00 (83)   on time (100)     change (60)    71.2
+  ... and 10 more
+
+Recommended: OF-COS-MAL-0018, CostaLink, 14 Jul 14:15 -> 14 Jul 20:05, EUR 39.00 (score 82.3)
+Advantages:
+  + flexibility: changeable and refundable ticket
+Remaining disadvantages:
+  - price: EUR 39.00, EUR 8.50 more than the cheapest option
+  - departure: departs 3h15 from your preferred time (another option departs on time)
+Compared with #2 (OF-SOL-MAL-0011, SolRuta, 74.8): 7.5 points ahead; gains on flexibility (+18.0), duration (+1.2); loses on departure (-6.7), price (-5.0).
+Not part of the score: direct, no transfers; 30 kg luggage included; 41 seat(s) left; customer rating 4.0.
+This is the best match under the hard constraints and weights used (price 25%, duration 10%, departure 20%, flexibility 45%). It is not objectively the best offer: different weights can give a different recommendation.
+
+====================================================================================================
+Example trip: Madrid -> Malaga, 12 Jul - 14 Jul, budget EUR 50.00
+The same 102 offers, recommended for 5 kinds of traveller:
+
+  No.  Traveller                                    Fit  Recommended                            Price  Score
+   1.  Balanced traveller (specification example)    15  SolRuta, Mon 13 Jul 12:15              31.00     77
+       + EUR 31.00, EUR 0.50 more than the cheapest option   - takes 6h45, 1h45 longer than the fastest option
+   2.  Budget traveller                              22  SolRuta, Mon 13 Jul 12:15              31.00     84
+       + EUR 31.00, EUR 2.00 more than the cheapest option   - takes 6h45, 1h45 longer than the fastest option
+   3.  Business traveller                            13  VerdeBus, Mon 13 Jul 11:00             48.00     64
+       + a compromise across the priorities   - takes 6h00, 1h00 longer than the fastest option
+   4.  Environment-focused traveller                 22  VerdeBus, Mon 13 Jul 11:00             48.00     81
+       + lowest CO2 of the options (6.4 kg)   - EUR 48.00, EUR 19.00 more than the cheapest option
+   5.  Flexibility-focused tourist                   15  CostaLink, Tue 14 Jul 14:15            39.00     82
+       + changeable and refundable ticket   - EUR 39.00, EUR 8.50 more than the cheapest option
+
+Fit = offers that meet the traveller's requirements. Score: 0-100 for that traveller's priorities.

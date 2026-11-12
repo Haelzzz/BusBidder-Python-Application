@@ -85,6 +85,7 @@ python -m pytest
 | `src/busbidder/booking/` | Simulated bookings and seat capacity |
 | `src/busbidder/cli.py` | Interactive menu and `--compare` |
 | `data/` | Input data (companies, destinations, offers) |
+| `examples/` | Saved output referred to in the report (`--compare` run, rejected records) |
 | `config/` | `settings.json` and traveller profiles |
 | `logs/` | Log file `busbidder.log` (created at run time) |
 | `scripts/generate_data.py` | Reproducible dataset generator |
