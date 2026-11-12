@@ -13,6 +13,7 @@ VALID = {
     "origin": "Madrid",
     "data": {"companies": "data/companies.json", "destinations": "data/destinations.json", "offers": "data/offers.csv"},
     "validation": {"rating_min": 1.0, "rating_max": 5.0, "review_file": "logs/rejected_records.csv"},
+    "bookings": {"file": "bookings/bookings.json"},
     "logging": {"file": "logs/busbidder.log", "level": "info"},
 }
 

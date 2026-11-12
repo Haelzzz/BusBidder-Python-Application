@@ -18,7 +18,8 @@ class Settings:
     companies_file: Path
     destinations_file: Path
     offers_file: Path
-    review_file: Path  
+    review_file: Path
+    bookings_file: Path  
     log_file: Path
     log_level: str
     rating_min: float
@@ -41,6 +42,7 @@ def load_settings(path: Path = SETTINGS_FILE) -> Settings:
             destinations_file=_resolve(data["data"]["destinations"]),
             offers_file=_resolve(data["data"]["offers"]),
             review_file=_resolve(data["validation"]["review_file"]),
+            bookings_file=_resolve(data["bookings"]["file"]),
             log_file=_resolve(data["logging"]["file"]),
             log_level=str(data["logging"]["level"]).upper(),
             rating_min=float(data["validation"]["rating_min"]),

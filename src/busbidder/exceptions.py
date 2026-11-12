@@ -21,6 +21,10 @@ class InvalidRequestError(BusBidderError):
     """A traveller request is internally inconsistent (e.g. end date before start date)."""
 
 
+class BookingError(BusBidderError):
+    """A booking cannot be made (unknown offer, not enough seats, invalid details)."""
+
+
 class InvalidWeightsError(BusBidderError):
     """Criterion weights are unknown, negative, or do not total 1.0."""
 

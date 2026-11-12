@@ -10,11 +10,12 @@ the calendar.
 
 import re
 
-# Company and destination codes, e.g. "SOL", "MAL".
 CODE_RE = re.compile(r"[A-Z]{3}")
 
-# Offer IDs encode company and destination, e.g. "OF-SOL-MAL-0001". 
 OFFER_ID_RE = re.compile(r"OF-(?P<company>[A-Z]{3})-(?P<destination>[A-Z]{3})-(?P<seq>\d{4})")
+
+BOOKING_REF_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+BOOKING_REF_RE = re.compile(rf"BB-[{BOOKING_REF_ALPHABET}]{{6}}")
 
 # 24-hour clock time with leading zeros, 00:00 to 23:59.
 TIME_RE = re.compile(r"(?P<hour>[01]\d|2[0-3]):(?P<minute>[0-5]\d)")

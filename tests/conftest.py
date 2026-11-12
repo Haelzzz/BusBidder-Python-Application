@@ -20,6 +20,7 @@ def fixture_settings(tmp_path: Path) -> Settings:
         destinations_file=FIXTURES / "destinations.json",
         offers_file=FIXTURES / "offers.csv",
         review_file=tmp_path / "rejected_records.csv",
+        bookings_file=tmp_path / "bookings.json",
         log_file=tmp_path / "busbidder.log",
         log_level="INFO",
         rating_min=1.0,
