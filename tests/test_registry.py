@@ -31,6 +31,13 @@ def test_register_and_create(registry: Registry[Plugin]) -> None:
     assert registry.names() == ["alpha"]
 
 
+def test_names_keep_registration_order(registry: Registry[Plugin]) -> None:
+    for name in ("zulu", "alpha", "mike"):
+        registry.register(name)(type(name, (Plugin,), {}))
+    assert registry.names() == ["zulu", "alpha", "mike"]
+    assert list(registry) == ["zulu", "alpha", "mike"]
+
+
 def test_duplicate_name_is_rejected(registry: Registry[Plugin]) -> None:
     @registry.register("alpha")
     class Alpha(Plugin):
