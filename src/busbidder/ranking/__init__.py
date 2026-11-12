@@ -1,1 +1,5 @@
-"""Weighted multi-criteria ranking (Task 4 - not implemented yet)."""
+"""Weighted multi-criteria ranking of acceptable offers (Task 4)."""
+
+from busbidder.ranking.engine import CriterionScore, RankedOffer, Ranking, rank_offers, validate_weights
+
+__all__ = ["CriterionScore", "RankedOffer", "Ranking", "rank_offers", "validate_weights"]

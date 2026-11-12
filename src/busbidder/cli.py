@@ -1,8 +1,8 @@
 """Command-line interface.
 
 For now it loads and validates the data, prints the load summary, and filters
-the offers for the example traveller from the project specification. The
-interactive part (choose profile, view ranking, book) is built in a later task.
+and ranks the offers for the example traveller from the project specification.
+The interactive part (choose profile, book) is built in a later task.
 """
 
 import sys
@@ -15,10 +15,9 @@ from busbidder.filtering import FilterResult, filter_offers
 from busbidder.logging_setup import setup_logging
 from busbidder.models import TravellerRequest
 from busbidder.paths import PROJECT_ROOT
+from busbidder.ranking import rank_offers
 from busbidder.settings import load_settings
 
-# The example request from the specification. Temporary: replaced by traveller
-# profiles in a later task.
 EXAMPLE_REQUEST = TravellerRequest(
     destination_id="MAL",
     earliest_date=date(2026, 7, 12),
@@ -27,6 +26,7 @@ EXAMPLE_REQUEST = TravellerRequest(
     preferred_departure=time(9, 0),
     max_transfers=1,
     require_changeable=True,
+    weights={"price": 0.40, "duration": 0.25, "departure": 0.15, "flexibility": 0.20},
 )
 
 
@@ -56,18 +56,20 @@ def main(argv: list[str] | None = None) -> int:
     print(f"\nExample request: Madrid to {destination.name}")
     result = filter_offers(repository.offers_to(request.destination_id), request)
     print(result.summary())
-    _print_offers(result)
-    print("\nRanking and booking are not implemented yet.")
+    _print_removed(result)
+    try:
+        ranking = rank_offers(result.accepted, request)
+    except BusBidderError as exc:
+        logger.error("Ranking failed: %s", exc)
+        return 1
+    print("\nRanked acceptable offers (raw value and score 0-100 per criterion):")
+    print(ranking.table())
+    print("\nBooking is not implemented yet.")
     return 0
 
 
-def _print_offers(result: FilterResult, max_removed: int = 5) -> None:
-    """List acceptable offers, and some offers inside the travel window that were removed, with reasons."""
-    print("\nAcceptable offers (not ranked yet):")
-    for offer in sorted(result.accepted, key=lambda o: o.departure):
-        print(f"  {offer.offer_id}  {offer.company.name:<16}{offer.departure:%d %b %H:%M}  "
-              f"EUR {offer.price_eur:>6.2f}  {offer.transfers} transfer(s)  {offer.fare.fare_type}")
-
+def _print_removed(result: FilterResult, max_removed: int = 5) -> None:
+    """List some offers inside the travel window that were removed, with reasons."""
     in_window = [r for r in result.rejected if all(v.constraint != "travel_window" for v in r.violations)]
     if in_window:
         print(f"\nRemoved offers inside the travel window (first {min(max_removed, len(in_window))} "
