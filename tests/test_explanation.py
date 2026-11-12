@@ -11,6 +11,11 @@ from busbidder.ranking import explain_top, rank_offers
 SPEC_WEIGHTS = {"price": 0.40, "duration": 0.25, "departure": 0.15, "flexibility": 0.20}
 REQUEST = TravellerRequest("MAL", date(2026, 7, 12), date(2026, 7, 14),
                            preferred_departure=time(9, 0), weights=SPEC_WEIGHTS)
+def texts(points) -> tuple[str, ...]:
+    """Points as "criterion: text" strings, for comparing."""
+    return tuple(str(p) for p in points)
+
+
 STANDARD = FareConditions(FareType.STANDARD, True, False, 20)
 FLEX = FareConditions(FareType.FLEX, True, True, 30)
 
@@ -39,13 +44,13 @@ def test_advantages_and_disadvantages_come_from_the_data(worked_example: list[Of
     explanation = explain_top(rank_offers(worked_example, REQUEST))
     assert explanation.offer.offer.offer_id == "OF-SOL-MAL-0002"
     # Most important criterion first (flexibility 20% before departure 15%).
-    assert explanation.advantages == (
+    assert texts(explanation.advantages) == (
         "flexibility: changeable and refundable ticket",
         "departure: departs at your preferred time",
     )
-    assert explanation.disadvantages == ("price: EUR 45.00, EUR 15.00 more than the cheapest acceptable offer",)
+    assert texts(explanation.disadvantages) == ("price: EUR 45.00, EUR 15.00 more than the cheapest option",)
     # Duration (89 vs best 100) is between the two thresholds, so it is not mentioned.
-    assert not any(text.startswith("duration") for text in explanation.advantages + explanation.disadvantages)
+    assert not any(text.startswith("duration") for text in texts(explanation.advantages + explanation.disadvantages))
 
 
 def test_comparison_with_runner_up(worked_example: list[Offer]) -> None:
@@ -77,19 +82,19 @@ def test_a_score_everyone_shares_is_not_praised(worked_example: list[Offer]) -> 
     # Preferred time 02:00: every offer is 6 hours or more away, so all score 0.
     request = dataclasses.replace(REQUEST, preferred_departure=time(2, 0))
     explanation = explain_top(rank_offers(worked_example, request))
-    assert not any(text.startswith("departure") for text in explanation.advantages)
-    assert any(text.startswith("departure") for text in explanation.disadvantages)
+    assert not any(text.startswith("departure") for text in texts(explanation.advantages))
+    assert any(text.startswith("departure") for text in texts(explanation.disadvantages))
 
 
 def test_criterion_without_any_values_is_not_mentioned(worked_example: list[Offer]) -> None:
     explanation = explain_top(rank_offers(worked_example, dataclasses.replace(REQUEST, preferred_departure=None)))
-    assert not any("departure" in text for text in explanation.advantages + explanation.disadvantages)
+    assert not any("departure" in text for text in texts(explanation.advantages + explanation.disadvantages))
 
 
 def test_zero_weight_criterion_is_not_mentioned(worked_example: list[Offer]) -> None:
     request = dataclasses.replace(REQUEST, weights={"price": 1.0, "flexibility": 0.0})
     explanation = explain_top(rank_offers(worked_example, request))
-    assert not any("flexibility" in text for text in explanation.advantages + explanation.disadvantages)
+    assert not any("flexibility" in text for text in texts(explanation.advantages + explanation.disadvantages))
 
 
 def test_missing_value_is_listed_as_disadvantage(offer: Offer) -> None:
@@ -98,7 +103,7 @@ def test_missing_value_is_listed_as_disadvantage(offer: Offer) -> None:
     request = dataclasses.replace(REQUEST, weights={"price": 0.6, "emissions": 0.4})
     explanation = explain_top(rank_offers([unreported, reported], request))
     assert explanation.offer.offer.offer_id == "OF-NOC-MAL-0001"
-    assert "emissions: CO2 not reported by the company (given a neutral score)" in explanation.disadvantages
+    assert "emissions: CO2 not reported by the company (given a neutral score)" in texts(explanation.disadvantages)
 
 
 def test_text_has_all_parts_and_the_caveat(worked_example: list[Offer]) -> None:

@@ -15,6 +15,7 @@ class Constraint(ABC):
     """A mandatory condition an offer must satisfy before it can be ranked."""
 
     name: ClassVar[str] = ""  # set by @CONSTRAINTS.register(...)
+    plain_reason: ClassVar[str] = ""  # why an offer was removed, in everyday words
 
     def is_active(self, request: TravellerRequest) -> bool:
         """Whether ``request`` sets this constraint.

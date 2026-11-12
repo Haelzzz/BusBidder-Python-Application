@@ -18,6 +18,8 @@ def _duration(minutes: int) -> str:
 
 @CONSTRAINTS.register("destination")
 class DestinationConstraint(Constraint):
+    plain_reason = "other destination"
+
     def requirement(self, request: TravellerRequest) -> str:
         return f"goes to {request.destination_id}"
 
@@ -31,6 +33,8 @@ class DestinationConstraint(Constraint):
 class TravelWindowConstraint(Constraint):
     """The departure date must be in the window; an overnight arrival may fall after it."""
 
+    plain_reason = "other dates"
+
     def requirement(self, request: TravellerRequest) -> str:
         return f"departs between {request.earliest_date} and {request.latest_date}"
 
@@ -42,6 +46,8 @@ class TravelWindowConstraint(Constraint):
 
 @CONSTRAINTS.register("seats")
 class SeatsConstraint(Constraint):
+    plain_reason = "too few seats"
+
     def requirement(self, request: TravellerRequest) -> str:
         return f"at least {request.seats} seat(s) available"
 
@@ -54,6 +60,8 @@ class SeatsConstraint(Constraint):
 @CONSTRAINTS.register("budget")
 class BudgetConstraint(Constraint):
     """The budget covers the whole booking: ticket price times seats."""
+
+    plain_reason = "over budget"
 
     def is_active(self, request: TravellerRequest) -> bool:
         return request.max_budget_eur is not None
@@ -70,6 +78,8 @@ class BudgetConstraint(Constraint):
 
 @CONSTRAINTS.register("max_transfers")
 class MaxTransfersConstraint(Constraint):
+    plain_reason = "too many transfers"
+
     def is_active(self, request: TravellerRequest) -> bool:
         return request.max_transfers is not None
 
@@ -84,6 +94,8 @@ class MaxTransfersConstraint(Constraint):
 
 @CONSTRAINTS.register("max_duration")
 class MaxDurationConstraint(Constraint):
+    plain_reason = "journey too long"
+
     def is_active(self, request: TravellerRequest) -> bool:
         return request.max_duration_min is not None
 
@@ -98,6 +110,8 @@ class MaxDurationConstraint(Constraint):
 
 @CONSTRAINTS.register("luggage")
 class LuggageConstraint(Constraint):
+    plain_reason = "too little luggage"
+
     def is_active(self, request: TravellerRequest) -> bool:
         return request.min_luggage_kg > 0
 
@@ -112,6 +126,8 @@ class LuggageConstraint(Constraint):
 
 @CONSTRAINTS.register("changeable")
 class ChangeableConstraint(Constraint):
+    plain_reason = "ticket not changeable"
+
     def is_active(self, request: TravellerRequest) -> bool:
         return request.require_changeable
 
@@ -126,6 +142,8 @@ class ChangeableConstraint(Constraint):
 
 @CONSTRAINTS.register("refundable")
 class RefundableConstraint(Constraint):
+    plain_reason = "ticket not refundable"
+
     def is_active(self, request: TravellerRequest) -> bool:
         return request.require_refundable
 

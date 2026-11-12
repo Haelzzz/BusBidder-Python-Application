@@ -30,10 +30,18 @@ It is optional: the commands below also work without it (see *Running*).
 python -m busbidder
 ```
 
-On start the program loads and validates `data/` and prints a summary.
-Rejected records are written to `logs/rejected_records.csv`; the full log is
-`logs/busbidder.log`. It then ranks the offers for every traveller profile in
-`config/profiles/` on an example trip and compares the recommendations.
+This opens a menu: search (destination, dates, seats, budget, traveller
+profile), see the filtered and ranked offers with an explanation, and book one.
+Payment is simulated. To print the profile comparison on the example trip
+without any questions (e.g. to save the output):
+
+```bash
+python -m busbidder --compare
+```
+
+On start the program loads and validates `data/`. Rejected records are written
+to `logs/rejected_records.csv`, bookings to `bookings/bookings.json`, and the
+full log to `logs/busbidder.log`. Traveller profiles are in `config/profiles/`.
 
 Without the editable install, either set `PYTHONPATH=src` first or run the
 entry file directly: `python src/busbidder/__main__.py`. In VS Code, use the

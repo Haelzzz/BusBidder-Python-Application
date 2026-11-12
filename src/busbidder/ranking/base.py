@@ -29,6 +29,11 @@ class Criterion(ABC):
 
     name: ClassVar[str] = "" 
     label: ClassVar[str] = ""  
+    plain_label: ClassVar[str] = ""  # everyday wording for customers, e.g. "low price"
+
+    def plain_label_for(self, request: TravellerRequest) -> str:
+        """``plain_label``, made specific to the request where that helps."""
+        return self.plain_label
 
     @abstractmethod
     def raw_value(self, offer: Offer, request: TravellerRequest) -> float | None:

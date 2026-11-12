@@ -21,13 +21,25 @@ ADVANTAGE_GAP = 10.0
 DISADVANTAGE_GAP = 15.0
 GOOD_SCORE = 50.0
 CLOSE_MARGIN = 2.0  # a lead smaller than this is called out as fragile
+SHORT_CAVEAT = "Recommended for these priorities; other priorities can give a different choice."
+
+
+@dataclass(frozen=True, slots=True)
+class Point:
+    """One advantage or disadvantage, e.g. ("flexibility", "changeable and refundable ticket")."""
+
+    criterion: str
+    text: str
+
+    def __str__(self) -> str:
+        return f"{self.criterion}: {self.text}"
 
 
 @dataclass(frozen=True, slots=True)
 class Explanation:
     offer: RankedOffer
-    advantages: tuple[str, ...]
-    disadvantages: tuple[str, ...]
+    advantages: tuple[Point, ...]
+    disadvantages: tuple[Point, ...]
     comparison: str
     other_facts: tuple[str, ...]  # shown for context; not part of the score
     caveat: str
@@ -55,8 +67,8 @@ def explain_top(ranking: Ranking) -> Explanation | None:
     if top is None:
         return None
 
-    advantages: list[str] = []
-    disadvantages: list[str] = []
+    advantages: list[Point] = []
+    disadvantages: list[Point] = []
     by_importance = sorted(range(len(ranking.criteria)), key=lambda i: -ranking.weights[ranking.criteria[i].name])
     for i in by_importance:
         criterion = ranking.criteria[i]
@@ -67,12 +79,12 @@ def explain_top(ranking: Ranking) -> Explanation | None:
         if not known:
             continue  # no offer has a value (e.g. no preferred time): not applicable
         if result.missing:
-            disadvantages.append(f"{criterion.name}: {criterion.describe_missing()}")
+            disadvantages.append(Point(criterion.name, criterion.describe_missing()))
             continue
 
         best = max(known, key=lambda s: s.score)
         gap = best.score - result.score
-        phrase = f"{criterion.name}: {criterion.describe(result.raw, best.raw)}"
+        phrase = Point(criterion.name, criterion.describe(result.raw, best.raw))
         if gap <= ADVANTAGE_GAP and result.score >= GOOD_SCORE:
             advantages.append(phrase)
         elif gap >= DISADVANTAGE_GAP or result.score < GOOD_SCORE:

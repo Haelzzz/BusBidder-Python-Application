@@ -21,6 +21,7 @@ def _hours(minutes: float) -> str:
 @CRITERIA.register("price")
 class PriceCriterion(RatioToBestCriterion):
     label = "Price"
+    plain_label = "low price"
 
     def raw_value(self, offer: Offer, request: TravellerRequest) -> float | None:
         return offer.price_eur
@@ -30,13 +31,14 @@ class PriceCriterion(RatioToBestCriterion):
 
     def describe(self, raw: float, best_raw: float) -> str:
         if raw == best_raw:
-            return f"cheapest acceptable offer (EUR {raw:.2f})"
-        return f"EUR {raw:.2f}, EUR {raw - best_raw:.2f} more than the cheapest acceptable offer"
+            return f"cheapest option (EUR {raw:.2f})"
+        return f"EUR {raw:.2f}, EUR {raw - best_raw:.2f} more than the cheapest option"
 
 
 @CRITERIA.register("duration")
 class DurationCriterion(RatioToBestCriterion):
     label = "Duration"
+    plain_label = "short journey"
 
     def raw_value(self, offer: Offer, request: TravellerRequest) -> float | None:
         return offer.duration_min
@@ -46,8 +48,8 @@ class DurationCriterion(RatioToBestCriterion):
 
     def describe(self, raw: float, best_raw: float) -> str:
         if raw == best_raw:
-            return f"fastest acceptable journey ({_hours(raw)})"
-        return f"takes {_hours(raw)}, {_hours(raw - best_raw)} longer than the fastest acceptable journey"
+            return f"fastest option ({_hours(raw)})"
+        return f"takes {_hours(raw)}, {_hours(raw - best_raw)} longer than the fastest option"
 
 
 @CRITERIA.register("departure")
@@ -59,6 +61,7 @@ class DepartureCriterion(FixedScaleCriterion):
     """
 
     label = "Departure"
+    plain_label = "departure close to your preferred time"
 
     def raw_value(self, offer: Offer, request: TravellerRequest) -> float | None:
         if request.preferred_departure is None:
@@ -67,6 +70,11 @@ class DepartureCriterion(FixedScaleCriterion):
         preferred = request.preferred_departure.hour * 60 + request.preferred_departure.minute
         difference = abs(departure - preferred)
         return min(difference, MINUTES_PER_DAY - difference)  
+
+    def plain_label_for(self, request: TravellerRequest) -> str:
+        if request.preferred_departure is None:
+            return self.plain_label
+        return f"departure close to {request.preferred_departure:%H:%M}"
 
     def score(self, raw: float) -> float:
         return 100.0 * max(0.0, 1 - raw / DEPARTURE_TOLERANCE_MIN)
@@ -81,8 +89,8 @@ class DepartureCriterion(FixedScaleCriterion):
         if raw == best_raw:
             return text
         if best_raw == 0:
-            return f"{text} (an acceptable offer departs on time)"
-        return f"{text} (closest acceptable offer: {_hours(best_raw)})"
+            return f"{text} (another option departs on time)"
+        return f"{text} (closest option: {_hours(best_raw)})"
 
 
 @CRITERIA.register("flexibility")
@@ -90,6 +98,7 @@ class FlexibilityCriterion(FixedScaleCriterion):
     """Level 0: not changeable, 1: changeable, 2: changeable and refundable."""
 
     label = "Flexibility"
+    plain_label = "flexible ticket (change or refund)"
 
     def raw_value(self, offer: Offer, request: TravellerRequest) -> float | None:
         if offer.fare.refundable and offer.fare.changeable:
@@ -115,6 +124,7 @@ class EmissionsCriterion(RatioToBestCriterion):
     """Estimated kg CO2 per passenger. Optional in the data, so it can be missing."""
 
     label = "CO2"
+    plain_label = "low CO2 emissions"
 
     def raw_value(self, offer: Offer, request: TravellerRequest) -> float | None:
         return offer.co2_kg
@@ -124,7 +134,7 @@ class EmissionsCriterion(RatioToBestCriterion):
 
     def describe(self, raw: float, best_raw: float) -> str:
         if raw == best_raw:
-            return f"lowest CO2 of the acceptable offers ({raw:.1f} kg)"
+            return f"lowest CO2 of the options ({raw:.1f} kg)"
         return f"{raw:.1f} kg CO2, {raw - best_raw:.1f} kg more than the lowest"
 
     def describe_missing(self) -> str:
