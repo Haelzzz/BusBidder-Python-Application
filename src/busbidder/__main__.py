@@ -10,7 +10,7 @@ from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from busbidder.cli import main  # noqa: E402  (import after the path fix above)
+from busbidder.cli import main  
 
 if __name__ == "__main__":
     raise SystemExit(main())
