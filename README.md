@@ -80,7 +80,10 @@ python -m pytest
 | `src/busbidder/` | Application package |
 | `src/busbidder/models/` | Domain classes (Company, Destination, Offer, ...) |
 | `src/busbidder/data_io/` | Loading and validating data files |
-| `src/busbidder/filtering/`, `ranking/`, `booking/` | Later tasks |
+| `src/busbidder/filtering/` | Hard constraints that remove unacceptable offers |
+| `src/busbidder/ranking/` | Weighted scoring, ranking and the recommendation explanation |
+| `src/busbidder/booking/` | Simulated bookings and seat capacity |
+| `src/busbidder/cli.py` | Interactive menu and `--compare` |
 | `data/` | Input data (companies, destinations, offers) |
 | `config/` | `settings.json` and traveller profiles |
 | `logs/` | Log file `busbidder.log` (created at run time) |
