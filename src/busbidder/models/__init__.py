@@ -4,7 +4,7 @@ from busbidder.models.booking import Booking, BookingStatus, PaymentStatus
 from busbidder.models.company import Company
 from busbidder.models.destination import Destination
 from busbidder.models.offer import FareConditions, FareType, Offer
-from busbidder.models.traveller import TravellerRequest
+from busbidder.models.traveller import TravellerProfile, TravellerRequest, Trip
 
 __all__ = [
     "Booking",
@@ -15,5 +15,7 @@ __all__ = [
     "FareType",
     "Offer",
     "PaymentStatus",
+    "TravellerProfile",
     "TravellerRequest",
+    "Trip",
 ]

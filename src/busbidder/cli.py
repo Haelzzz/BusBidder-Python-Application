@@ -1,33 +1,27 @@
 """Command-line interface.
 
-For now it loads and validates the data, prints the load summary, and filters
-and ranks the offers for the example traveller from the project specification.
-The interactive part (choose profile, book) is built in a later task.
+For now it loads and validates the data, then runs every traveller profile on
+the trip from the project specification and compares the recommendations. The
+interactive part (choose profile and trip, book) is built in a later task.
 """
 
 import sys
-from datetime import date, time
+from datetime import date
 from pathlib import Path
 
 from busbidder.data_io.loader import load_marketplace
+from busbidder.data_io.profiles import load_profiles
 from busbidder.exceptions import BusBidderError, ConfigError
-from busbidder.filtering import FilterResult, filter_offers
+from busbidder.filtering import filter_offers
 from busbidder.logging_setup import setup_logging
-from busbidder.models import TravellerRequest
+from busbidder.models import Trip
 from busbidder.paths import PROJECT_ROOT
-from busbidder.ranking import rank_offers
+from busbidder.ranking import RankedOffer, explain_top, rank_offers
 from busbidder.settings import load_settings
 
-EXAMPLE_REQUEST = TravellerRequest(
-    destination_id="MAL",
-    earliest_date=date(2026, 7, 12),
-    latest_date=date(2026, 7, 14),
-    max_budget_eur=50.0,
-    preferred_departure=time(9, 0),
-    max_transfers=1,
-    require_changeable=True,
-    weights={"price": 0.40, "duration": 0.25, "departure": 0.15, "flexibility": 0.20},
-)
+# The trip from the specification. Temporary: chosen by the user in a later task.
+EXAMPLE_TRIP = Trip("MAL", date(2026, 7, 12), date(2026, 7, 14), max_budget_eur=50.0)
+TOP_ROWS = 5
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -42,8 +36,9 @@ def main(argv: list[str] | None = None) -> int:
     logger.info("BusBidder started")
     try:
         repository, report = load_marketplace(settings)
+        profiles = load_profiles()
     except BusBidderError as exc:
-        logger.error("Loading failed: %s", exc)
+        logger.error("Start-up failed: %s", exc)
         return 1
 
     print(report.summary())
@@ -51,31 +46,39 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Rejected records written to {_display(settings.review_file)} "
               f"(details in {_display(settings.log_file)})")
 
-    request = EXAMPLE_REQUEST
-    destination = repository.destinations[request.destination_id]
-    print(f"\nExample request: Madrid to {destination.name}")
-    result = filter_offers(repository.offers_to(request.destination_id), request)
-    print(result.summary())
-    _print_removed(result)
-    try:
-        ranking = rank_offers(result.accepted, request)
-    except BusBidderError as exc:
-        logger.error("Ranking failed: %s", exc)
-        return 1
-    print("\nRanked acceptable offers (raw value and score 0-100 per criterion):")
-    print(ranking.table())
+    trip = EXAMPLE_TRIP
+    destination = repository.destinations[trip.destination_id]
+    print(f"\nExample trip: Madrid to {destination.name}, {trip.earliest_date} to {trip.latest_date}, "
+          f"budget EUR {trip.max_budget_eur:.2f}. Compared across {len(profiles)} traveller profiles.")
+
+    recommendations: list[tuple[str, int, RankedOffer | None]] = []
+    for profile in profiles.values():
+        request = profile.request_for(trip)
+        result = filter_offers(repository.offers_to(trip.destination_id), request)
+        try:
+            ranking = rank_offers(result.accepted, request)
+        except BusBidderError as exc:
+            logger.error("Ranking failed for profile %s: %s", profile.key, exc)
+            return 1
+
+        print(f"\n{'=' * 100}\n{profile.name}: {profile.description}\n")
+        print(result.summary())
+        if ranking.offers:
+            print(f"\nTop {min(TOP_ROWS, len(ranking.offers))} of {len(ranking.offers)} "
+                  "(raw value and score 0-100 per criterion):")
+            print(ranking.table(limit=TOP_ROWS))
+            print()
+            print(explain_top(ranking).text())
+        recommendations.append((profile.name, len(result.accepted), ranking.top))
+
+    print(f"\n{'=' * 100}\nRecommendation per profile (same trip, same offers):")
+    print(f"  {'Profile':<45}{'Acceptable':>10}  Recommended offer")
+    for name, acceptable, top in recommendations:
+        offer = (f"{top.offer.offer_id}  {top.offer.company.name:<16}{top.offer.departure:%d %b %H:%M}  "
+                 f"EUR {top.offer.price_eur:>6.2f}  score {top.total:.1f}") if top else "none"
+        print(f"  {name:<45}{acceptable:>10}  {offer}")
     print("\nBooking is not implemented yet.")
     return 0
-
-
-def _print_removed(result: FilterResult, max_removed: int = 5) -> None:
-    """List some offers inside the travel window that were removed, with reasons."""
-    in_window = [r for r in result.rejected if all(v.constraint != "travel_window" for v in r.violations)]
-    if in_window:
-        print(f"\nRemoved offers inside the travel window (first {min(max_removed, len(in_window))} "
-              f"of {len(in_window)}):")
-        for rejected in sorted(in_window, key=lambda r: r.offer.departure)[:max_removed]:
-            print(f"  {rejected.offer.offer_id}  {rejected.explain()}")
 
 
 def _display(path: Path) -> str:

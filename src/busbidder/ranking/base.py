@@ -42,6 +42,14 @@ class Criterion(ABC):
         """The raw value as shown to the user."""
         return f"{raw:g}"
 
+    @abstractmethod
+    def describe(self, raw: float, best_raw: float) -> str:
+        """A phrase for the explanation, comparing ``raw`` with the best acceptable offer's value."""
+
+    def describe_missing(self) -> str:
+        """A phrase for the explanation when the offer has no value."""
+        return f"{self.label.lower()} not available"
+
 
 class RatioToBestCriterion(Criterion):
     """Lower is better. The best offer scores 100; twice the best value scores 50."""

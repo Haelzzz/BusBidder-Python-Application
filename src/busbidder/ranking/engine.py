@@ -71,21 +71,27 @@ class Ranking:
     def top(self) -> RankedOffer | None:
         return self.offers[0] if self.offers else None
 
-    def table(self) -> str:
-        """The ranking as a text table: raw value and (score) per criterion, and the total."""
+    def table(self, limit: int | None = None) -> str:
+        """The ranking as a text table: raw value and (score) per criterion, and the total.
+
+        ``limit`` shows only the first rows.
+        """
         weights = ", ".join(f"{c.name} {self.weights[c.name]:.0%}" for c in self.criteria)
         lines = [f"Weights: {weights}"]
         header = f"{'#':>3}  {'Offer':<17}{'Company':<16}{'Departs':<14}"
         header += "".join(f"{c.label:>16}" for c in self.criteria) + f"{'Total':>8}"
         lines.append(header)
-        for ranked in self.offers:
+        shown = self.offers[:limit]
+        for ranked in shown:
             row = (f"{ranked.rank:>3}  {ranked.offer.offer_id:<17}{ranked.offer.company.name:<16}"
                    f"{ranked.offer.departure:%d %b %H:%M}  ")
             for criterion, result in zip(self.criteria, ranked.scores):
                 value = "n/a*" if result.missing else criterion.format_raw(result.raw)
                 row += f"{value} ({result.score:.0f})".rjust(16)
             lines.append(row + f"{ranked.total:>8.1f}")
-        if any(s.missing for r in self.offers for s in r.scores):
+        if len(shown) < len(self.offers):
+            lines.append(f"  ... and {len(self.offers) - len(shown)} more")
+        if any(s.missing for r in shown for s in r.scores):
             lines.append("* value missing or not applicable: given the median score of the other offers")
         return "\n".join(lines)
 

@@ -28,6 +28,11 @@ class PriceCriterion(RatioToBestCriterion):
     def format_raw(self, raw: float) -> str:
         return f"{raw:.2f}"
 
+    def describe(self, raw: float, best_raw: float) -> str:
+        if raw == best_raw:
+            return f"cheapest acceptable offer (EUR {raw:.2f})"
+        return f"EUR {raw:.2f}, EUR {raw - best_raw:.2f} more than the cheapest acceptable offer"
+
 
 @CRITERIA.register("duration")
 class DurationCriterion(RatioToBestCriterion):
@@ -38,6 +43,11 @@ class DurationCriterion(RatioToBestCriterion):
 
     def format_raw(self, raw: float) -> str:
         return _hours(raw)
+
+    def describe(self, raw: float, best_raw: float) -> str:
+        if raw == best_raw:
+            return f"fastest acceptable journey ({_hours(raw)})"
+        return f"takes {_hours(raw)}, {_hours(raw - best_raw)} longer than the fastest acceptable journey"
 
 
 @CRITERIA.register("departure")
@@ -64,6 +74,16 @@ class DepartureCriterion(FixedScaleCriterion):
     def format_raw(self, raw: float) -> str:
         return "on time" if raw == 0 else f"{_hours(raw)} off"
 
+    def describe(self, raw: float, best_raw: float) -> str:
+        if raw == 0:
+            return "departs at your preferred time"
+        text = f"departs {_hours(raw)} from your preferred time"
+        if raw == best_raw:
+            return text
+        if best_raw == 0:
+            return f"{text} (an acceptable offer departs on time)"
+        return f"{text} (closest acceptable offer: {_hours(best_raw)})"
+
 
 @CRITERIA.register("flexibility")
 class FlexibilityCriterion(FixedScaleCriterion):
@@ -82,6 +102,13 @@ class FlexibilityCriterion(FixedScaleCriterion):
     def format_raw(self, raw: float) -> str:
         return FLEXIBILITY_LABELS[int(raw)]
 
+    def describe(self, raw: float, best_raw: float) -> str:
+        return {
+            0: "ticket can be neither changed nor refunded",
+            1: "changeable ticket, but not refundable",
+            2: "changeable and refundable ticket",
+        }[int(raw)]
+
 
 @CRITERIA.register("emissions")
 class EmissionsCriterion(RatioToBestCriterion):
@@ -94,3 +121,11 @@ class EmissionsCriterion(RatioToBestCriterion):
 
     def format_raw(self, raw: float) -> str:
         return f"{raw:.1f}"
+
+    def describe(self, raw: float, best_raw: float) -> str:
+        if raw == best_raw:
+            return f"lowest CO2 of the acceptable offers ({raw:.1f} kg)"
+        return f"{raw:.1f} kg CO2, {raw - best_raw:.1f} kg more than the lowest"
+
+    def describe_missing(self) -> str:
+        return "CO2 not reported by the company (given a neutral score)"
