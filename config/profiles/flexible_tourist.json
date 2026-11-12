@@ -1,0 +1,7 @@
+{
+  "name": "Flexibility-focused tourist",
+  "description": "Travels with a suitcase and wants to be able to change or cancel; prefers a late-morning start.",
+  "preferred_departure": "11:00",
+  "requirements": {"min_luggage_kg": 20},
+  "weights": {"price": 0.25, "duration": 0.10, "departure": 0.20, "flexibility": 0.45}
+}

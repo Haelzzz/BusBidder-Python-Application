@@ -1,0 +1,7 @@
+{
+  "name": "Balanced traveller (specification example)",
+  "description": "The example traveller and weights from the project specification.",
+  "preferred_departure": "09:00",
+  "requirements": {"max_transfers": 1, "require_changeable": true},
+  "weights": {"price": 0.40, "duration": 0.25, "departure": 0.15, "flexibility": 0.20}
+}

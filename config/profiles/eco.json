@@ -1,0 +1,7 @@
+{
+  "name": "Environment-focused traveller",
+  "description": "Wants the lowest emissions; accepts at most one transfer.",
+  "preferred_departure": "09:00",
+  "requirements": {"max_transfers": 1},
+  "weights": {"price": 0.25, "duration": 0.10, "departure": 0.10, "flexibility": 0.10, "emissions": 0.45}
+}
