@@ -1,17 +1,33 @@
 """Command-line interface.
 
-For now it loads and validates the data and prints the load summary. The
+For now it loads and validates the data, prints the load summary, and filters
+the offers for the example traveller from the project specification. The
 interactive part (choose profile, view ranking, book) is built in a later task.
 """
 
 import sys
+from datetime import date, time
 from pathlib import Path
 
 from busbidder.data_io.loader import load_marketplace
 from busbidder.exceptions import BusBidderError, ConfigError
+from busbidder.filtering import FilterResult, filter_offers
 from busbidder.logging_setup import setup_logging
+from busbidder.models import TravellerRequest
 from busbidder.paths import PROJECT_ROOT
 from busbidder.settings import load_settings
+
+# The example request from the specification. Temporary: replaced by traveller
+# profiles in a later task.
+EXAMPLE_REQUEST = TravellerRequest(
+    destination_id="MAL",
+    earliest_date=date(2026, 7, 12),
+    latest_date=date(2026, 7, 14),
+    max_budget_eur=50.0,
+    preferred_departure=time(9, 0),
+    max_transfers=1,
+    require_changeable=True,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -34,8 +50,30 @@ def main(argv: list[str] | None = None) -> int:
     if report.rejected:
         print(f"Rejected records written to {_display(settings.review_file)} "
               f"(details in {_display(settings.log_file)})")
-    print(f"\n{len(repository.offers)} offers available. Filtering, ranking and booking are not implemented yet.")
+
+    request = EXAMPLE_REQUEST
+    destination = repository.destinations[request.destination_id]
+    print(f"\nExample request: Madrid to {destination.name}")
+    result = filter_offers(repository.offers_to(request.destination_id), request)
+    print(result.summary())
+    _print_offers(result)
+    print("\nRanking and booking are not implemented yet.")
     return 0
+
+
+def _print_offers(result: FilterResult, max_removed: int = 5) -> None:
+    """List acceptable offers, and some offers inside the travel window that were removed, with reasons."""
+    print("\nAcceptable offers (not ranked yet):")
+    for offer in sorted(result.accepted, key=lambda o: o.departure):
+        print(f"  {offer.offer_id}  {offer.company.name:<16}{offer.departure:%d %b %H:%M}  "
+              f"EUR {offer.price_eur:>6.2f}  {offer.transfers} transfer(s)  {offer.fare.fare_type}")
+
+    in_window = [r for r in result.rejected if all(v.constraint != "travel_window" for v in r.violations)]
+    if in_window:
+        print(f"\nRemoved offers inside the travel window (first {min(max_removed, len(in_window))} "
+              f"of {len(in_window)}):")
+        for rejected in sorted(in_window, key=lambda r: r.offer.departure)[:max_removed]:
+            print(f"  {rejected.offer.offer_id}  {rejected.explain()}")
 
 
 def _display(path: Path) -> str:

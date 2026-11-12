@@ -68,8 +68,8 @@ class Registry(Generic[T]):
         return self.get(name)(*args, **kwargs)
 
     def names(self) -> list[str]:
-        """Registered names in alphabetical order."""
-        return sorted(self._entries)
+        """Registered names in registration order (the order the classes are defined)."""
+        return list(self._entries)
 
     def __contains__(self, name: object) -> bool:
         return name in self._entries
