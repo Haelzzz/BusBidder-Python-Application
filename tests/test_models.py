@@ -46,6 +46,8 @@ def test_request_single_day_window_is_allowed() -> None:
         {"seats": 0},
         {"max_budget_eur": -1.0},
         {"max_transfers": -1},
+        {"max_duration_min": 0},
+        {"min_luggage_kg": -1},
     ],
 )
 def test_request_rejects_inconsistent_input(kwargs: dict) -> None:

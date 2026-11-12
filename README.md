@@ -32,7 +32,8 @@ python -m busbidder
 
 On start the program loads and validates `data/` and prints a summary.
 Rejected records are written to `logs/rejected_records.csv`; the full log is
-`logs/busbidder.log`.
+`logs/busbidder.log`. It then ranks the offers for every traveller profile in
+`config/profiles/` on an example trip and compares the recommendations.
 
 Without the editable install, either set `PYTHONPATH=src` first or run the
 entry file directly: `python src/busbidder/__main__.py`. In VS Code, use the
