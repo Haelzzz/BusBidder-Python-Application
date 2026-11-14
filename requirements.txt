@@ -1,3 +1,4 @@
 # The application itself uses only the Python standard library (3.11+).
 # These are development/test dependencies.
 pytest>=8.0
+matplotlib>=3.8  # only for scripts/plot_company_profiles.py (report figure)

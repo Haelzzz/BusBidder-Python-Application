@@ -8,7 +8,7 @@ using a transparent weighted scoring model. Final project for ACIT4420
 
 - Python 3.11 or newer (developed with 3.13)
 - No third-party runtime libraries (standard library only)
-- `pytest` for the tests (see `requirements.txt`)
+- `pytest` for the tests, `matplotlib` for the report figure (see `requirements.txt`)
 
 ## Setup
 
@@ -59,6 +59,8 @@ python scripts/generate_data.py
 ```
 
 Options: `--seed N` for a different dataset, `--out DIR` to write elsewhere.
+`python scripts/plot_company_profiles.py` draws the company comparison figure
+from the data into `examples/`.
 
 | File | Contents |
 |---|---|
@@ -85,7 +87,7 @@ python -m pytest
 | `src/busbidder/booking/` | Simulated bookings and seat capacity |
 | `src/busbidder/cli.py` | Interactive menu and `--compare` |
 | `data/` | Input data (companies, destinations, offers) |
-| `examples/` | Saved output referred to in the report (`--compare` run, rejected records) |
+| `examples/` | Saved output referred to in the report (`--compare` run, rejected records, company figure) |
 | `config/` | `settings.json` and traveller profiles |
 | `logs/` | Log file `busbidder.log` (created at run time) |
 | `scripts/generate_data.py` | Reproducible dataset generator |

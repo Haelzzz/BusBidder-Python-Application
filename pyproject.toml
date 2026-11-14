@@ -11,7 +11,7 @@ requires-python = ">=3.11"
 dependencies = []  # standard library only at runtime
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=8.0", "matplotlib>=3.8"]  # matplotlib only for the report figure script
 
 [project.scripts]
 busbidder = "busbidder.cli:main"
